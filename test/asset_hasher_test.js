@@ -30,8 +30,9 @@ exports.asset_hasher = {
   hasher: function(test) {
 
     test.ok(grunt.file.exists('tmp/assets.dat'));
-    test.ok(grunt.file.exists('tmp/28/54557e2d60ea0b6bf3460719edb32e'));
-    test.ok(grunt.file.exists('tmp/26/f06fb2a3789dee933ec23f7bf6e64b'));
+    test.ok(grunt.file.exists('tmp/25/7d865fa11537f90e27fbfd32ade9b2'));
+    test.ok(grunt.file.exists('tmp/6b/40ddcf83856e62cfbfc59377631277'));
+
 
     var crypto = require('crypto');
     var data = grunt.file.read('tmp/assets.dat', { encoding: null });

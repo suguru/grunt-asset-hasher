@@ -54,7 +54,7 @@ module.exports = function(grunt) {
 
         // get md5 hash name
         var md5 = crypto.createHash('md5');
-        md5.update(hashKey + filepath, 'utf8');
+        md5.update(hashKey + name, 'utf8');
 
         // get modified time
         var stat = fs.statSync(filepath);
