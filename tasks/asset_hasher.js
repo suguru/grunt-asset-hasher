@@ -28,6 +28,8 @@ module.exports = function(grunt) {
     var hashKey = options.hash_key || '';
     var list = [];
 
+    var outKeys = {};
+
     // Iterate over all specified file groups.
     this.files.forEach(function(f) {
       // Concat specified files.
@@ -61,6 +63,11 @@ module.exports = function(grunt) {
         var time = Math.floor((stat.mtime.getTime() - timeBase) / 1000);
 
         var digest = md5.digest('hex');
+        if (digest in outKeys) {
+          throw new Error('Hash conflicted "' + filepath + '"');
+        }
+        outKeys[digest] = true;
+
         var outdir = digest.substring(0, 2);
         var outname = digest.substring(2);
 
