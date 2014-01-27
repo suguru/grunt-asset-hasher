@@ -27,11 +27,11 @@ In your project's Gruntfile, add a section named `asset_hasher` to the data obje
 grunt.initConfig({
   asset_hasher: {
     your_target: {
-      prefix: 'src/contents',
+      prefix: 'src/contents/',
       hash_key: 'hashing_prefix_key'
-    },
-    files: {
-      'out', 'src/contents/**/*'
+      files: {
+        'out', 'src/contents/**/*'
+      }
     }
   },
 });
@@ -99,7 +99,8 @@ grunt.initConfig({
           file: 'assets.dat',
           encrypt: {
             algorithm: 'aes128',
-            secret: 'secret'
+            secret: 'secret',
+            md5: true // Use MD5 digest of secret if true
           }
         }
       },
