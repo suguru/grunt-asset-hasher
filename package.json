@@ -1,7 +1,7 @@
 {
   "name": "grunt-asset-hasher",
   "description": "The Grunt plugin to make filename hashed and generate file list TSV",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "homepage": "https://github.com/a10682/grunt-asset-hasher",
   "author": {
     "name": "Suguru Namura",
