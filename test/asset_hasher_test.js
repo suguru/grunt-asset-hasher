@@ -44,20 +44,26 @@ exports.asset_hasher = {
     var testAsset = function(text) {
       var lines = text.split('\n');
 
-      test.equal(lines.length, 2);
+      test.equal(lines.length, 3);
 
       var line1 = lines[0].split('\t');
-      var line2 = lines[0].split('\t');
+      var line2 = lines[1].split('\t');
+      var line3 = lines[2].split('\t');
 
       test.equal(line1[0], '123');
       test.equal(typeof line1[1], 'string');
       test.equal(line1[1].length, 6);
       test.ok(line1[2].match(/^[0-9]+$/));
 
-      test.equal(line2[0], '123');
+      test.equal(line2[0], 'aG4eV3Can9iR8ar4');
       test.equal(typeof line2[1], 'string');
       test.equal(line2[1].length, 6);
       test.ok(line2[2].match(/^[0-9]+$/));
+
+      test.equal(line3[0], 'testing');
+      test.equal(typeof line3[1], 'string');
+      test.equal(line3[1].length, 6);
+      test.ok(line3[2].match(/^[0-9]+$/));
     };
 
     // basic
