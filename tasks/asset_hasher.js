@@ -92,10 +92,12 @@ module.exports = function(grunt) {
         } else {
           listKey = new Buffer(listOpts.encrypt.secret, 'utf8');
         }
+        grunt.log.writeln('Secret key is "' + listKey.toString('hex') + '"');
         if (listOpts.encrypt.iv) {
           md5 = crypto.createHash('md5');
           md5.update(listOpts.encrypt.iv, 'utf8');
           iv = md5.digest();
+          grunt.log.writeln('Initialization vector is "' + iv.toString('hex') + '"');
         }
         var algorithm = listOpts.encrypt.algorithm || 'aes-128-ecb';
         var enc;
