@@ -51,7 +51,7 @@ module.exports = function(grunt) {
           list: {
             file: 'assets.dat',
             encrypt: {
-              algorithm: 'aes128',
+              algorithm: 'aes-128-ecb',
               secret: 'secret'
             }
           }
@@ -67,7 +67,8 @@ module.exports = function(grunt) {
           list: {
             file: 'assets.dat',
             encrypt: {
-              algorithm: 'aes128',
+              algorithm: 'aes-128-cbc',
+              iv: 'initialization_vector',
               secret: 'secret',
               md5: true
             }

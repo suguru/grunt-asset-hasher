@@ -68,19 +68,23 @@ exports.asset_hasher = {
     var crypto = require('crypto');
     var data = grunt.file.read('tmp/encrypt/assets.dat', { encoding: null });
 
-    var aes = crypto.createDecipher('aes128', new Buffer('secret', 'utf8'));
+    var aes = crypto.createDecipher('aes-128-ecb', new Buffer('secret', 'utf8'));
     var buf1 = aes.update(data);
     var buf2 = aes.final();
     text = Buffer.concat([buf1, buf2]).toString('utf8');
     testAsset(text);
 
-    // encrypt_md5
+    // encrypt_md5 with iv
     data = grunt.file.read('tmp/encrypt_md5/assets.dat', { encoding: null });
     var md5 = crypto.createHash('md5');
     md5.update('secret', 'utf8');
     var secret = md5.digest();
 
-    aes = crypto.createDecipher('aes128', secret);
+    md5 = crypto.createHash('md5');
+    md5.update('initialization_vector', 'utf8');
+    var iv = md5.digest();
+
+    aes = crypto.createDecipheriv('aes-128-cbc', secret, iv);
     buf1 = aes.update(data);
     buf2 = aes.final();
     text = Buffer.concat([buf1, buf2]).toString('utf8');
