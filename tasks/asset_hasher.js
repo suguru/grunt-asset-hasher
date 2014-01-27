@@ -77,7 +77,14 @@ module.exports = function(grunt) {
       var listOpts = options.list || {};
 
       if (listOpts.encrypt) {
-        var listKey = new Buffer(listOpts.encrypt.secret, 'utf8');
+        var listKey;
+        if (listOpts.encrypt.md5) {
+          var md5 = crypto.createHash('md5');
+          md5.update(listOpts.encrypt.secret, 'utf8');
+          listKey = md5.digest();
+        } else {
+          listKey = new Buffer(listOpts.encrypt.secret, 'utf8');
+        }
         var algorithm = listOpts.encrypt.algorithm || 'aes128';
         var enc = crypto.createCipher(algorithm, listKey);
         var encbuf1 = enc.update(listBuffer);

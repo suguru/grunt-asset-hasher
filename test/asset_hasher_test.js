@@ -29,35 +29,62 @@ exports.asset_hasher = {
   },
   hasher: function(test) {
 
-    test.ok(grunt.file.exists('tmp/assets.dat'));
-    test.ok(grunt.file.exists('tmp/25/7d865fa11537f90e27fbfd32ade9b2'));
-    test.ok(grunt.file.exists('tmp/6b/40ddcf83856e62cfbfc59377631277'));
+    test.ok(grunt.file.exists('tmp/basic/assets.dat'));
+    test.ok(grunt.file.exists('tmp/basic/25/7d865fa11537f90e27fbfd32ade9b2'));
+    test.ok(grunt.file.exists('tmp/basic/6b/40ddcf83856e62cfbfc59377631277'));
 
+    test.ok(grunt.file.exists('tmp/encrypt/assets.dat'));
+    test.ok(grunt.file.exists('tmp/encrypt/25/7d865fa11537f90e27fbfd32ade9b2'));
+    test.ok(grunt.file.exists('tmp/encrypt/6b/40ddcf83856e62cfbfc59377631277'));
 
+    test.ok(grunt.file.exists('tmp/encrypt_md5/assets.dat'));
+    test.ok(grunt.file.exists('tmp/encrypt_md5/25/7d865fa11537f90e27fbfd32ade9b2'));
+    test.ok(grunt.file.exists('tmp/encrypt_md5/6b/40ddcf83856e62cfbfc59377631277'));
+
+    var testAsset = function(text) {
+      var lines = text.split('\n');
+
+      test.equal(lines.length, 2);
+
+      var line1 = lines[0].split('\t');
+      var line2 = lines[0].split('\t');
+
+      test.equal(line1[0], '123');
+      test.equal(typeof line1[1], 'string');
+      test.equal(line1[1].length, 6);
+      test.ok(line1[2].match(/^[0-9]+$/));
+
+      test.equal(line2[0], '123');
+      test.equal(typeof line2[1], 'string');
+      test.equal(line2[1].length, 6);
+      test.ok(line2[2].match(/^[0-9]+$/));
+    };
+
+    // basic
+    var text = grunt.file.read('tmp/basic/assets.dat', { encoding: 'utf8' });
+    testAsset(text);
+
+    // encrypt
     var crypto = require('crypto');
-    var data = grunt.file.read('tmp/assets.dat', { encoding: null });
+    var data = grunt.file.read('tmp/encrypt/assets.dat', { encoding: null });
 
     var aes = crypto.createDecipher('aes128', new Buffer('secret', 'utf8'));
     var buf1 = aes.update(data);
     var buf2 = aes.final();
-    var text = Buffer.concat([buf1, buf2]).toString('utf8');
+    text = Buffer.concat([buf1, buf2]).toString('utf8');
+    testAsset(text);
 
-    var lines = text.split('\n');
+    // encrypt_md5
+    data = grunt.file.read('tmp/encrypt_md5/assets.dat', { encoding: null });
+    var md5 = crypto.createHash('md5');
+    md5.update('secret', 'utf8');
+    var secret = md5.digest();
 
-    test.equal(lines.length, 2);
-
-    var line1 = lines[0].split('\t');
-    var line2 = lines[0].split('\t');
-
-    test.equal(line1[0], '123');
-    test.equal(typeof line1[1], 'string');
-    test.equal(line1[1].length, 6);
-    test.ok(line1[2].match(/^[0-9]+$/));
-
-    test.equal(line2[0], '123');
-    test.equal(typeof line2[1], 'string');
-    test.equal(line2[1].length, 6);
-    test.ok(line2[2].match(/^[0-9]+$/));
+    aes = crypto.createDecipher('aes128', secret);
+    buf1 = aes.update(data);
+    buf2 = aes.final();
+    text = Buffer.concat([buf1, buf2]).toString('utf8');
+    testAsset(text);
 
     test.done();
   },

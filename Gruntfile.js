@@ -32,7 +32,19 @@ module.exports = function(grunt) {
     asset_hasher: {
       options: {
       },
-      hashing: {
+      basic: {
+        options: {
+          prefix: 'test/fixtures/',
+          hash_key: 'hashing',
+          list: {
+            file: 'assets.dat'
+          }
+        },
+        files: {
+          'tmp/basic': 'test/fixtures/**/*'
+        }
+      },
+      encrypt: {
         options: {
           prefix: 'test/fixtures/',
           hash_key: 'hashing',
@@ -45,7 +57,24 @@ module.exports = function(grunt) {
           }
         },
         files: {
-          'tmp/': 'test/fixtures/**/*'
+          'tmp/encrypt': 'test/fixtures/**/*'
+        }
+      },
+      encrypt_md5: {
+        options: {
+          prefix: 'test/fixtures/',
+          hash_key: 'hashing',
+          list: {
+            file: 'assets.dat',
+            encrypt: {
+              algorithm: 'aes128',
+              secret: 'secret',
+              md5: true
+            }
+          }
+        },
+        files: {
+          'tmp/encrypt_md5': 'test/fixtures/**/*'
         }
       }
     },
@@ -67,7 +96,7 @@ module.exports = function(grunt) {
 
   // Whenever the "test" task is run, first clean the "tmp" dir, then run this
   // plugin's task(s), then test the result.
-  grunt.registerTask('test', ['clean', 'asset_hasher', 'nodeunit']);
+  grunt.registerTask('test', ['clean', 'asset_hasher:basic', 'asset_hasher:encrypt', 'asset_hasher:encrypt_md5', 'nodeunit']);
 
   // By default, lint and run all tests.
   grunt.registerTask('default', ['jshint', 'test']);
