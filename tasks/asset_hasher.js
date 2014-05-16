@@ -93,13 +93,16 @@ module.exports = function(grunt) {
           listKey = new Buffer(listOpts.encrypt.secret, 'utf8');
         }
         grunt.log.writeln('Secret key is "' + listKey.toString('hex') + '"');
+        var algorithm = listOpts.encrypt.algorithm || 'aes-128-ecb';
         if (listOpts.encrypt.iv) {
           md5 = crypto.createHash('md5');
           md5.update(listOpts.encrypt.iv, 'utf8');
           iv = md5.digest();
+          if (algorithm === 'bf-cbc') {
+            iv = iv.slice(0, 8);
+          }
           grunt.log.writeln('Initialization vector is "' + iv.toString('hex') + '"');
         }
-        var algorithm = listOpts.encrypt.algorithm || 'aes-128-ecb';
         var enc;
         if (iv) {
           enc = crypto.createCipheriv(algorithm, listKey, iv);
